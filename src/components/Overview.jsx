@@ -7,7 +7,7 @@ function Overview({ goals }) {
 
   return (
     <div className="bg-gray-800 text-white p-6 rounded-2xl shadow-md w-full mb-6">
-      <h2 className="text-xl font-semibold mb-2">💡 Overview</h2>
+      <h2 className="text-xl font-semibold mb-2"> Overview</h2>
       <div className="grid grid-cols-2 gap-4 text-sm">
         <div className="bg-gray-700 p-4 rounded-xl">
           <p className="text-gray-400">Total Target</p>

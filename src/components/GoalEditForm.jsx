@@ -12,7 +12,7 @@ function GoalEditForm({ goal, onUpdateGoal, onClose }) {
   function handleChange(e) {
     const { name, value } = e.target;
 
-    // Ensure targetAmount and savedAmount are stored as numbers
+  
     const updatedValue =
       name === "targetAmount" || name === "savedAmount"
         ? parseFloat(value) || 0

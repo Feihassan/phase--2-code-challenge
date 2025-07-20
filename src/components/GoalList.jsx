@@ -30,7 +30,7 @@ function GoalList({ goals, onEdit, onDelete, onDeposit, selectedCategory, sortBy
           <p><strong>Deadline:</strong> {goal.deadline}</p>
           <p><strong>Created:</strong> {goal.createdAt}</p>
 
-          {/* Progress bar */}
+          
           <div className="mt-3 mb-4">
             <div className="h-2 w-full bg-gray-700 rounded-full">
               <div
@@ -45,7 +45,7 @@ function GoalList({ goals, onEdit, onDelete, onDeposit, selectedCategory, sortBy
             </div>
           </div>
 
-          {/* Deposit + Edit buttons */}
+          
           <div className="flex flex-col sm:flex-row items-stretch gap-2">
             <input
               type="number"
