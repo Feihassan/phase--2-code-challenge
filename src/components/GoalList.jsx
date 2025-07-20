@@ -1,62 +1,88 @@
-// src/components/GoalList.jsx
-import React from "react";
-import ProgressBar from "./ProgressBar";
+import React, { useState } from "react";
 
-function GoalList({ goals, onDeleteGoal, onEditGoal }) {
+function GoalList({ goals, onEdit, onDelete, onDeposit, selectedCategory, sortBy }) {
+  const [depositValues, setDepositValues] = useState({});
+
+  const filteredGoals = goals
+    .filter((goal) =>
+      selectedCategory ? goal.category === selectedCategory : true
+    )
+    .sort((a, b) => {
+      if (sortBy === "deadline") {
+        return new Date(a.deadline) - new Date(b.deadline);
+      } else if (sortBy === "category") {
+        return a.category.localeCompare(b.category);
+      }
+      return 0;
+    });
+
   return (
-    <div className="w-full md:max-w-3xl mx-auto mt-6 space-y-4">
-      {goals.length === 0 ? (
-        <p className="text-center text-gray-400">No goals yet. Add one!</p>
-      ) : (
-        goals.map((goal) => {
-          const progress =
-            goal.deposits && goal.deposits.length > 0
-              ? goal.deposits.reduce((sum, deposit) => sum + deposit.amount, 0)
-              : 0;
+    <div className="space-y-6">
+      {filteredGoals.map((goal) => (
+        <div
+          key={goal.id}
+          className="bg-slate-900 text-white p-4 rounded-2xl shadow-lg w-full"
+        >
+          <h2 className="text-xl font-bold text-green-400">{goal.name}</h2>
+          <p><strong>Target:</strong> KES {goal.targetAmount.toLocaleString()}</p>
+          <p><strong>Saved:</strong> KES {goal.savedAmount.toLocaleString()}</p>
+          <p><strong>Category:</strong> {goal.category}</p>
+          <p><strong>Deadline:</strong> {goal.deadline}</p>
+          <p><strong>Created:</strong> {goal.createdAt}</p>
 
-          return (
-            <div
-              key={goal.id}
-              className="bg-gray-800 text-white p-4 rounded-lg shadow-md"
-            >
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">{goal.name}</h3>
-                <div className="space-x-2">
-                  <button
-                    onClick={() => onEditGoal(goal)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => onDeleteGoal(goal.id)}
-                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-              <p className="text-sm mt-1">
-                Target: Ksh{" "}
-                {goal.targetAmount
-                  ? goal.targetAmount.toLocaleString()
-                  : "0"}
-              </p>
-              <p className="text-sm text-gray-400">Deadline: {goal.deadline}</p>
-              <ProgressBar
-                percentage={
-                  goal.targetAmount
-                    ? (progress / goal.targetAmount) * 100
-                    : 0
-                }
-              />
-              <p className="text-sm mt-1 text-green-400">
-                Saved: Ksh {progress.toLocaleString()}
-              </p>
+          {/* Progress bar */}
+          <div className="mt-3 mb-4">
+            <div className="h-2 w-full bg-gray-700 rounded-full">
+              <div
+                className="h-full bg-green-500 rounded-full"
+                style={{
+                  width: `${Math.min(
+                    (goal.savedAmount / goal.targetAmount) * 100,
+                    100
+                  )}%`,
+                }}
+              ></div>
             </div>
-          );
-        })
-      )}
+          </div>
+
+          {/* Deposit + Edit buttons */}
+          <div className="flex flex-col sm:flex-row items-stretch gap-2">
+            <input
+              type="number"
+              placeholder="Deposit amount"
+              className="flex-1 px-3 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none"
+              value={depositValues[goal.id] || ""}
+              onChange={(e) =>
+                setDepositValues({ ...depositValues, [goal.id]: e.target.value })
+              }
+            />
+            <button
+              onClick={() => {
+                const amount = parseFloat(depositValues[goal.id]);
+                if (!isNaN(amount) && amount > 0) {
+                  onDeposit(goal.id, amount);
+                  setDepositValues({ ...depositValues, [goal.id]: "" });
+                }
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+            >
+              Deposit
+            </button>
+            <button
+              onClick={() => onEdit(goal)}
+              className="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => onDelete(goal.id)}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

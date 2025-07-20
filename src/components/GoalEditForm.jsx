@@ -1,59 +1,80 @@
-// src/components/GoalEditForm.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 
-function GoalEditForm({ goal, onUpdateGoal, onCancel }) {
-  const [name, setName] = useState(goal.name);
-  const [targetAmount, setTargetAmount] = useState(goal.targetAmount);
-  const [deadline, setDeadline] = useState(goal.deadline);
+function GoalEditForm({ goal, onUpdateGoal, onClose }) {
+  const [formData, setFormData] = useState({
+    ...goal,
+    targetAmount: goal.targetAmount || 0,
+    savedAmount: goal.savedAmount || 0,
+    category: goal.category || "",
+    deadline: goal.deadline || "",
+  });
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+
+    // Ensure targetAmount and savedAmount are stored as numbers
+    const updatedValue =
+      name === "targetAmount" || name === "savedAmount"
+        ? parseFloat(value) || 0
+        : value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: updatedValue,
+    }));
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
-    const updatedGoal = {
-      id: goal.id, // Include the id property
-      name,
-      targetAmount,
-      deadline,
-    };
-    onUpdateGoal(updatedGoal);
+    onUpdateGoal(formData);
+    onClose();
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full md:max-w-xl mx-auto mt-4 bg-gray-800 p-5 rounded-lg shadow-md flex flex-col gap-4 text-white"
-    >
-      <h2 className="text-lg font-semibold">Edit Goal</h2>
+    <form onSubmit={handleSubmit} className="space-y-2">
       <input
         type="text"
+        name="name"
         placeholder="Goal Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="p-2 rounded bg-gray-700 text-white"
+        value={formData.name}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-700 text-white"
       />
       <input
         type="number"
-        placeholder="Target Amount"
-        value={targetAmount}
-        onChange={(e) => setTargetAmount(Number(e.target.value))}
-        className="p-2 rounded bg-gray-700 text-white"
+        name="targetAmount"
+        placeholder="Target Amount (KES)"
+        value={formData.targetAmount}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-700 text-white"
+      />
+      <input
+        type="text"
+        name="category"
+        placeholder="Category"
+        value={formData.category}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-700 text-white"
       />
       <input
         type="date"
-        value={deadline}
-        onChange={(e) => setDeadline(e.target.value)}
-        className="p-2 rounded bg-gray-700 text-white"
+        name="deadline"
+        value={formData.deadline}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-700 text-white"
       />
-      <div className="flex gap-2">
+
+      <div className="flex space-x-2">
         <button
           type="submit"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded"
+          className="bg-blue-600 px-4 py-2 rounded text-white"
         >
           Save
         </button>
         <button
           type="button"
-          onClick={onCancel}
-          className="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded"
+          onClick={onClose}
+          className="px-4 py-2 text-gray-300 underline"
         >
           Cancel
         </button>

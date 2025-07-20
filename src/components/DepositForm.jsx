@@ -1,32 +1,32 @@
-// src/components/DepositForm.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 
-function DepositForm({ onDeposit }) {
+function DepositForm({ goal, onUpdateGoal }) {
   const [amount, setAmount] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-    const parsed = parseFloat(amount);
-    if (!isNaN(parsed) && parsed > 0) {
-      onDeposit(parsed);
-      setAmount("");
-    }
+    const updatedGoal = {
+      ...goal,
+      savedAmount: Number(goal.savedAmount) + Number(amount),
+    };
+    onUpdateGoal(updatedGoal);
+    setAmount("");
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 items-center mt-2">
+    <form onSubmit={handleSubmit} className="mt-2 space-y-2">
       <input
         type="number"
-        placeholder="Deposit"
+        placeholder="Deposit amount"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="p-2 rounded bg-gray-700 text-white w-full md:w-32"
+        className="w-full p-2 rounded bg-gray-700 text-white"
       />
       <button
         type="submit"
-        className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded"
+        className="bg-yellow-500 text-black font-bold py-1 px-3 rounded"
       >
-        Add
+        Deposit
       </button>
     </form>
   );

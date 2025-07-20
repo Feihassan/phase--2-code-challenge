@@ -1,12 +1,12 @@
-// src/components/GoalForm.jsx
 import { useState } from "react";
 
 function GoalForm({ onAddGoal }) {
   const [formData, setFormData] = useState({
     name: "",
-    category: "",
     targetAmount: "",
+    category: "",
     deadline: "",
+    savedAmount: 0,
   });
 
   function handleChange(e) {
@@ -16,69 +16,52 @@ function GoalForm({ onAddGoal }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    const newGoal = {
-      ...formData,
-      savedAmount: 0,
-      targetAmount: parseFloat(formData.targetAmount),
-    };
-
-    onAddGoal(newGoal);
+    if (!formData.name || !formData.targetAmount) return;
+    onAddGoal(formData);
     setFormData({
       name: "",
-      category: "",
       targetAmount: "",
+      category: "",
       deadline: "",
+      savedAmount: 0,
     });
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-[#1e293b] p-4 sm:p-6 rounded-lg shadow-md max-w-xl mx-auto"
-    >
-      <h2 className="text-lg sm:text-xl font-bold text-white mb-4">Add New Goal</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <input
-          name="name"
-          type="text"
-          placeholder="Goal Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="bg-[#0f172a] text-white border border-gray-600 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-          required
-        />
-        <input
-          name="category"
-          type="text"
-          placeholder="Category"
-          value={formData.category}
-          onChange={handleChange}
-          className="bg-[#0f172a] text-white border border-gray-600 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-          required
-        />
-        <input
-          name="targetAmount"
-          type="number"
-          placeholder="Target Amount"
-          value={formData.targetAmount}
-          onChange={handleChange}
-          className="bg-[#0f172a] text-white border border-gray-600 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-          required
-        />
-        <input
-          name="deadline"
-          type="date"
-          value={formData.deadline}
-          onChange={handleChange}
-          className="bg-[#0f172a] text-white border border-gray-600 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
-          required
-        />
-      </div>
-      <button
-        type="submit"
-        className="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-      >
+    <form onSubmit={handleSubmit} className="bg-gray-800 p-4 rounded-xl space-y-3 shadow-md">
+      <h2 className="text-lg font-bold text-white">Add New Goal</h2>
+      <input
+        type="text"
+        name="name"
+        placeholder="Goal name"
+        value={formData.name}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-700 text-white"
+      />
+      <input
+        type="number"
+        name="targetAmount"
+        placeholder="Target amount"
+        value={formData.targetAmount}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-700 text-white"
+      />
+      <input
+        type="text"
+        name="category"
+        placeholder="Category"
+        value={formData.category}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-700 text-white"
+      />
+      <input
+        type="date"
+        name="deadline"
+        value={formData.deadline}
+        onChange={handleChange}
+        className="w-full p-2 rounded bg-gray-700 text-white"
+      />
+      <button type="submit" className="w-full bg-green-600 py-2 rounded text-white font-bold">
         Add Goal
       </button>
     </form>

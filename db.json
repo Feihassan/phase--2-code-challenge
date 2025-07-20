@@ -1,0 +1,56 @@
+{
+  "goals": [
+    {
+      "id": "7",
+      "name": "Home Renovation",
+      "targetAmount": 500000,
+      "savedAmount": 50000,
+      "category": "Home",
+      "deadline": "2026-06-30",
+      "createdAt": "2025-07-20"
+    },
+    {
+      "id": "8",
+      "name": "Education Fund",
+      "targetAmount": 250000,
+      "savedAmount": 90000,
+      "category": "Education",
+      "deadline": "2026-09-15",
+      "createdAt": "2025-07-20"
+    },
+    {
+      "id": "9",
+      "name": "Wedding",
+      "targetAmount": 600000,
+      "savedAmount": 100000,
+      "category": "Event",
+      "deadline": "2025-08-01",
+      "createdAt": "2025-07-20"
+    },
+    {
+      "id": "10",
+      "name": "Startup Fund",
+      "targetAmount": 12000000,
+      "savedAmount": 210000,
+      "category": "Business",
+      "deadline": "2026-12-31",
+      "createdAt": "2025-07-20"
+    },
+    {
+      "id": "b047",
+      "name": "Emergency Fund",
+      "targetAmount": "300000",
+      "category": "emergency",
+      "deadline": "2025-08-06",
+      "savedAmount": 0
+    },
+    {
+      "id": "9a82",
+      "name": "Emergency Fund",
+      "targetAmount": "60000",
+      "category": "emergency",
+      "deadline": "2025-08-09",
+      "savedAmount": 60000
+    }
+  ]
+}
