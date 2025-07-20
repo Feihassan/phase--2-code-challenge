@@ -30,21 +30,23 @@ Smart Goal Planner is a personal finance dashboard built for a fintech company t
 ##  File Structure
 
 smart-goal-planner/
-├── public/
-├── src/
-│ ├── components/
-│ │ ├ ─ GoalList.jsx
-│ │ ├ ─ GoalForm.jsx
-│ │ ├ ─ GoalEditForm.jsx
-│ │ ├ ─ DepositForm.jsx
-│ │ ├ ─ Overview.jsx
-│ │ └ ─ ProgressBar.jsx
-│ ├ ─ App.jsx
-│ ├ ─ index.jsx
-│ └ ─ index.css
-├ ─ db.json 
-├ ─ package.json
-└ ─ README.md
+smart-goal-planner/
+├── public/                   
+├── src/                     
+│   ├── components/       
+│   │   ├── GoalList.jsx         
+│   │   ├── GoalForm.jsx       
+│   │   ├── GoalEditForm.jsx     
+│   │   ├── DepositForm.jsx      
+│   │   ├── Overview.jsx         
+│   │   └── ProgressBar.jsx      
+│   ├── App.jsx              
+│   ├── index.jsx            
+│   └── index.css            
+├── db.json                  
+├── package.json             
+└── README.md                
+
 
 
 
@@ -55,4 +57,34 @@ smart-goal-planner/
 ## bash
 git clone https://github.com/Feihassan/phase--2-code-challenge
 
+
 cd smart-goal-planner
+
+ ## Install Dependencies
+
+ npm install
+
+
+ ## Start JSON Server
+
+ npx json-server --watch db.json --port 3000
+## Start React App
+
+npm run dev
+Then open http://localhost:5173 in your browser.
+
+
+
+## Author
+
+Feisal Abdi Hassan
+GitHub: @https://github.com/Feihassan
+Email: faisalabdi@gmail.com
+## License
+
+This project is licensed under the MIT License.
+
+
+
+
+
