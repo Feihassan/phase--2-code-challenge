@@ -33,22 +33,20 @@ smart-goal-planner/
 ├── public/
 ├── src/
 │ ├── components/
-│ │ ├── GoalList.jsx
-│ │ ├── GoalForm.jsx
-│ │ ├── GoalEditForm.jsx
-│ │ ├── DepositForm.jsx
-│ │ ├── Overview.jsx
-│ │ └── ProgressBar.jsx
-│ ├── App.jsx
-│ ├── index.jsx
-│ └── index.css
-├── db.json 
-├── package.json
-└── README.md
+│ │ ├ ─ GoalList.jsx
+│ │ ├ ─ GoalForm.jsx
+│ │ ├ ─ GoalEditForm.jsx
+│ │ ├ ─ DepositForm.jsx
+│ │ ├ ─ Overview.jsx
+│ │ └ ─ ProgressBar.jsx
+│ ├ ─ App.jsx
+│ ├ ─ index.jsx
+│ └ ─ index.css
+├ ─ db.json 
+├ ─ package.json
+└ ─ README.md
 
-bash
-Copy
-Edit
+
 
 ##  Getting Started
 
@@ -56,4 +54,5 @@ Edit
 
 ## bash
 git clone https://github.com/Feihassan/phase--2-code-challenge
+
 cd smart-goal-planner
