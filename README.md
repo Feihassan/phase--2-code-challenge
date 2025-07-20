@@ -1,12 +1,31 @@
-# React + Vite
+#  Smart Goal Planner
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Smart Goal Planner is a personal finance dashboard built for a fintech company to help users manage multiple savings goals. It allows users to create, update, track, and deposit into their financial goals while visualizing progress in a clean, professional dark-themed UI.
 
-Currently, two official plugins are available:
+##  Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-  **CRUD for Financial Goals**
+  - Create new savings goals (e.g., Emergency Fund, Travel)
+  - Edit target amount, category, and deadline
+  - Delete unwanted goals
+-  **Progress Tracking**
+  - Visual progress bar for each goal
+  - Calculates saved vs target amount
+-  **Make Deposits**
+  - Deposit money into specific goals
+  - Recalculates progress in real-time
+-  **Deadline & Overview**
+  - Tracks goal deadlines
+  - Summarizes total saved, total goals, and completed goals
+-  **Dark UI Dashboard**
+  - Clean and responsive design using Tailwind CSS v3
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+-  **React** – Frontend framework
+-  **Tailwind CSS v3** – Styling
+-  **json-server** – Simulated backend API with `db.json`
+-  **Fetch API** – For all data operations (no Axios)
+
+##  File Structure
+
