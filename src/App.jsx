@@ -11,14 +11,14 @@ function App() {
   const [sortBy, setSortBy] = useState("deadline");
 
   useEffect(() => {
-    fetch("http://localhost:3000/goals")
+    fetch("https://smart-goal-api1.onrender.com/goals")
       .then((res) => res.json())
       .then(setGoals)
       .catch((err) => console.error("Failed to fetch goals:", err));
   }, []);
 
   function handleAddGoal(newGoal) {
-    fetch("http://localhost:3000/goals", {
+    fetch("https://smart-goal-api1.onrender.com/goals", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newGoal),
@@ -28,7 +28,7 @@ function App() {
   }
 
   function handleUpdateGoal(updatedGoal) {
-    fetch(`http://localhost:3000/goals/${updatedGoal.id}`, {
+    fetch(`https://smart-goal-api1.onrender.com/goals${updatedGoal.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedGoal),
@@ -43,7 +43,7 @@ function App() {
   }
 
   function handleDeleteGoal(id) {
-    fetch(`http://localhost:3000/goals/${id}`, {
+    fetch(`https://smart-goal-api1.onrender.com/goals${id}`, {
       method: "DELETE",
     }).then(() => {
       setGoals((prev) => prev.filter((goal) => goal.id !== id));
