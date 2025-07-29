@@ -1,70 +1,106 @@
 // src/App.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import GoalForm from "./components/GoalForm";
 import GoalList from "./components/GoalList";
-import DepositForm from "./components/DepositForm";
 import Overview from "./components/Overview";
+import DepositForm from "./components/DepositForm";
 import GoalEditForm from "./components/GoalEditForm";
+
+const API_URL = "https://smart-goal-api1.onrender.com/goals";
 
 function App() {
   const [goals, setGoals] = useState([]);
   const [editingGoal, setEditingGoal] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
-  // Fetch goals
   useEffect(() => {
-    fetch("https://smart-goal-api1.onrender.com/goals")
+    fetch(API_URL)
       .then((res) => res.json())
-      .then(setGoals)
-      .catch((err) => console.error("Fetch failed:", err));
+      .then((data) => setGoals(data))
+      .catch((error) => console.error("Error fetching goals:", error));
   }, []);
 
-  const addGoal = (newGoal) => setGoals([...goals, newGoal]);
-
-  const deleteGoal = (id) => {
-    fetch(`https://smart-goal-api1.onrender.com/goals/${id}`, { method: "DELETE" });
-    setGoals(goals.filter((goal) => goal.id !== id));
+  const handleAddGoal = (newGoal) => {
+    fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newGoal),
+    })
+      .then((res) => res.json())
+      .then((data) => setGoals((prev) => [...prev, data]));
   };
 
-  const updateGoal = (updatedGoal) => {
-    fetch(`https://smart-goal-api1.onrender.com/goals/${updatedGoal.id}`, {
+  const handleDeleteGoal = (id) => {
+    fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+    }).then(() => setGoals((prev) => prev.filter((goal) => goal.id !== id)));
+  };
+
+  const handleUpdateGoal = (updatedGoal) => {
+    fetch(`${API_URL}/${updatedGoal.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedGoal),
-    }).then(() => {
-      setGoals(goals.map((g) => (g.id === updatedGoal.id ? updatedGoal : g)));
-      setEditingGoal(null);
-    });
+    })
+      .then((res) => res.json())
+      .then((data) =>
+        setGoals((prev) =>
+          prev.map((goal) => (goal.id === data.id ? data : goal))
+        )
+      );
   };
 
-  const handleDeposit = (id, amount) => {
-    setGoals((prevGoals) =>
-      prevGoals.map((g) =>
-        g.id === id ? { ...g, savedAmount: g.savedAmount + amount } : g
-      )
-    );
+  const handleDeposit = (goalId, amount) => {
+    const goalToUpdate = goals.find((goal) => goal.id === goalId);
+    if (!goalToUpdate) return;
+
+    const updatedGoal = {
+      ...goalToUpdate,
+      savedAmount: (goalToUpdate.savedAmount || 0) + amount,
+    };
+
+    handleUpdateGoal(updatedGoal);
   };
 
-  const handleEditGoal = (goal) => {
+  const handleEdit = (goal) => {
     setEditingGoal(goal);
   };
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen p-4">
+    <div className="bg-gray-900 min-h-screen text-white">
       <Navbar />
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto p-4 space-y-6">
         <Overview goals={goals} />
+
         {editingGoal ? (
-          <GoalEditForm goal={editingGoal} onUpdate={updateGoal} />
+          <GoalEditForm
+            goal={editingGoal}
+            onUpdateGoal={(updated) => {
+              handleUpdateGoal(updated);
+              setEditingGoal(null);
+            }}
+            onClose={() => setEditingGoal(null)}
+          />
         ) : (
-          <GoalForm onAddGoal={addGoal} />
+          <>
+            <button
+              onClick={() => setShowForm((prev) => !prev)}
+              className="bg-green-600 px-4 py-2 rounded text-white"
+            >
+              {showForm ? "Close Form" : "Add New Goal"}
+            </button>
+
+            {showForm && <GoalForm onAddGoal={handleAddGoal} />}
+          </>
         )}
+
         <GoalList
           goals={goals}
-          onDelete={deleteGoal}
-          onEdit={handleEditGoal} // ✅ make sure this is passed!
+          onDelete={handleDeleteGoal}
+          onDeposit={handleDeposit}
+          onEdit={handleEdit}
         />
-        <DepositForm goals={goals} onDeposit={handleDeposit} />
       </div>
     </div>
   );
