@@ -1,115 +1,70 @@
+// src/App.jsx
 import React, { useState, useEffect } from "react";
+import Navbar from "./components/Navbar";
 import GoalForm from "./components/GoalForm";
 import GoalList from "./components/GoalList";
+import DepositForm from "./components/DepositForm";
 import Overview from "./components/Overview";
 import GoalEditForm from "./components/GoalEditForm";
 
 function App() {
   const [goals, setGoals] = useState([]);
   const [editingGoal, setEditingGoal] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [sortBy, setSortBy] = useState("deadline");
 
+  // Fetch goals
   useEffect(() => {
     fetch("https://smart-goal-api1.onrender.com/goals")
       .then((res) => res.json())
       .then(setGoals)
-      .catch((err) => console.error("Failed to fetch goals:", err));
+      .catch((err) => console.error("Fetch failed:", err));
   }, []);
 
-  function handleAddGoal(newGoal) {
-    fetch("https://smart-goal-api1.onrender.com/goals", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newGoal),
-    })
-      .then((res) => res.json())
-      .then((data) => setGoals((prev) => [...prev, data]));
-  }
+  const addGoal = (newGoal) => setGoals([...goals, newGoal]);
 
-  function handleUpdateGoal(updatedGoal) {
-    fetch(`https://smart-goal-api1.onrender.com/goals${updatedGoal.id}`, {
-      method: "PUT",
+  const deleteGoal = (id) => {
+    fetch(`https://smart-goal-api1.onrender.com/goals/${id}`, { method: "DELETE" });
+    setGoals(goals.filter((goal) => goal.id !== id));
+  };
+
+  const updateGoal = (updatedGoal) => {
+    fetch(`https://smart-goal-api1.onrender.com/goals/${updatedGoal.id}`, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedGoal),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setGoals((prev) =>
-          prev.map((goal) => (goal.id === data.id ? data : goal))
-        );
-        setEditingGoal(null);
-      });
-  }
-
-  function handleDeleteGoal(id) {
-    fetch(`https://smart-goal-api1.onrender.com/goals${id}`, {
-      method: "DELETE",
     }).then(() => {
-      setGoals((prev) => prev.filter((goal) => goal.id !== id));
+      setGoals(goals.map((g) => (g.id === updatedGoal.id ? updatedGoal : g)));
+      setEditingGoal(null);
     });
-  }
+  };
 
-  function handleDeposit(goalId, amount) {
-    const goal = goals.find((g) => g.id === goalId);
-    const updatedGoal = {
-      ...goal,
-      savedAmount: Number(goal.savedAmount) + Number(amount),
-    };
+  const handleDeposit = (id, amount) => {
+    setGoals((prevGoals) =>
+      prevGoals.map((g) =>
+        g.id === id ? { ...g, savedAmount: g.savedAmount + amount } : g
+      )
+    );
+  };
 
-    handleUpdateGoal(updatedGoal);
-  }
+  const handleEditGoal = (goal) => {
+    setEditingGoal(goal);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white px-6 py-10">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold text-center">🎯 Smart Goal Planner</h1>
-
+    <div className="bg-gray-900 text-white min-h-screen p-4">
+      <Navbar />
+      <div className="max-w-4xl mx-auto">
         <Overview goals={goals} />
-
         {editingGoal ? (
-          <GoalEditForm goal={editingGoal} onUpdateGoal={handleUpdateGoal} />
+          <GoalEditForm goal={editingGoal} onUpdate={updateGoal} />
         ) : (
-          <GoalForm onAddGoal={handleAddGoal} />
+          <GoalForm onAddGoal={addGoal} />
         )}
-
-        <div className="flex gap-4 flex-wrap justify-between items-center">
-          <div>
-            <label className="mr-2">Filter by Category:</label>
-            <select
-              className="bg-gray-700 px-3 py-1 rounded"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
-              <option value="">All</option>
-              <option value="Emergency">Emergency</option>
-              <option value="Savings">Savings</option>
-              <option value="Vacation">Vacation</option>
-              <option value="Education">Education</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="mr-2">Sort by:</label>
-            <select
-              className="bg-gray-700 px-3 py-1 rounded"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="deadline">Deadline</option>
-              <option value="category">Category</option>
-            </select>
-          </div>
-        </div>
-
         <GoalList
           goals={goals}
-          onEdit={setEditingGoal}
-          onDelete={handleDeleteGoal}
-          onDeposit={handleDeposit}
-          selectedCategory={selectedCategory}
-          sortBy={sortBy}
+          onDelete={deleteGoal}
+          onEdit={handleEditGoal} // ✅ make sure this is passed!
         />
+        <DepositForm goals={goals} onDeposit={handleDeposit} />
       </div>
     </div>
   );
